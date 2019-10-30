@@ -1,17 +1,20 @@
 import xhr from './xhr'
 
+import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types/index'
+
 import { buildURL } from './helpers/url'
-import { AxiosRequestConfig } from './types/index'
+import { transformRequest, transformResponse } from './helpers/data'
+import { processHeaders } from './helpers/headers'
 
 /**
  * 主入口
  *
  * @param {AxiosRequestConfig} config 配置文件
  */
-function axios(config: AxiosRequestConfig): void {
+function axios(config: AxiosRequestConfig): AxiosPromise {
   config = processConfig(config)
 
-  xhr(config)
+  return xhr(config).then(res => transformResponseData(res))
 }
 
 /**
@@ -22,6 +25,8 @@ function axios(config: AxiosRequestConfig): void {
  */
 function processConfig(config: AxiosRequestConfig): AxiosRequestConfig {
   config.url = transformURL(config)
+  config.headers = transformHeaders(config)
+  config.data = transformRequestData(config)
   return config
 }
 
@@ -35,6 +40,39 @@ function transformURL(config: AxiosRequestConfig): string {
   const { url, params } = config
 
   return buildURL(url, params)
+}
+
+/**
+ * 转换请求的data
+ *
+ * @param {AxiosRequestConfig} config 配置文件
+ * @returns {*} 转换后的data
+ */
+function transformRequestData(config: AxiosRequestConfig): any {
+  return transformRequest(config.data)
+}
+
+/**
+ * 转换请求的header
+ *
+ * @param {AxiosRequestConfig} config 配置文件
+ * @returns {*} 转换后的headers
+ */
+function transformHeaders(config: AxiosRequestConfig): any {
+  const { headers = {}, data } = config
+
+  return processHeaders(headers, data)
+}
+
+/**
+ * 转换responseData
+ *
+ * @param {AxiosResponse} res 返回值
+ * @returns {AxiosResponse} 转换后的返回值
+ */
+function transformResponseData(res: AxiosResponse): AxiosResponse {
+  res.data = transformResponse(res.data)
+  return res
 }
 
 export default axios
