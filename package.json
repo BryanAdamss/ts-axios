@@ -128,5 +128,9 @@
     "webpack": "^4.41.2",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0"
+  },
+  "dependencies": {
+    "@types/qs": "^6.5.3",
+    "qs": "^6.9.0"
   }
 }
