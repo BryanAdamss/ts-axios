@@ -1,4 +1,3 @@
-import { AxiosRequestConfig } from './index'
 export type Method =
   | 'get'
   | 'GET'
@@ -23,6 +22,11 @@ export interface AxiosRequestConfig {
   headers?: any
   responseType?: XMLHttpRequestResponseType
   timeout?: number
+
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
+
+  cancelToken?: CancelToken
 
   [propName: string]: any
 }
@@ -76,6 +80,14 @@ export interface AxiosInstance extends Axios {
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 }
 
+export interface AxiosStatic extends AxiosInstance {
+  create(config?: AxiosRequestConfig): AxiosInstance
+
+  CancelToken: CancelTokenStatic
+  Cancel: CancelStatic
+  isCancel: (value: any) => boolean
+}
+
 export interface AxiosInterceptorManager<T> {
   use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number // 返回一个拦截器唯一id
 
@@ -87,4 +99,42 @@ export interface ResolvedFn<T> {
 }
 export interface RejectedFn {
   (err: any): any
+}
+
+export interface AxiosTransformer {
+  (data: any, headers?: any): any
+}
+
+export interface CancelToken {
+  promise: Promise<Cancel>
+  reason?: Cancel
+
+  throwIfRequested(): void
+}
+
+export interface Canceler {
+  (message?: string): void
+}
+
+export interface CancelExecutor {
+  (cancel: Canceler): void
+}
+
+export interface CancelTokenSource {
+  token: CancelToken
+  cancel: Canceler
+}
+
+export interface CancelTokenStatic {
+  new (executor: CancelExecutor): CancelToken
+
+  source(): CancelTokenSource
+}
+
+export interface Cancel {
+  message?: string
+}
+
+export interface CancelStatic {
+  new (message?: string): Cancel
 }
