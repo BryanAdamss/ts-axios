@@ -70,3 +70,40 @@ export function buildURL(url: string, params?: any): string {
 
   return url
 }
+
+/**
+ * 判断是否同源URL
+ *
+ * @export
+ * @param {string} requestURL 请求URL
+ * @returns {boolean} 是否为同源URL
+ */
+export function isURLSameOrigin(requestURL: string): boolean {
+  const { protocol, host } = resolveURL(requestURL)
+  const { protocol: curProtocol, host: curHost } = resolveURL(window.location.href)
+
+  return protocol === curProtocol && host === curHost
+}
+
+export interface URLOrigin {
+  protocol: string
+  host: string
+}
+
+/**
+ * 从URL中解析出protocol、host
+ *
+ * @export
+ * @param {string} url 待解析的URL
+ * @returns {URLOrigin} 解析出的protocol、host对象
+ */
+export function resolveURL(url: string): URLOrigin {
+  let urlParsingNode: HTMLAnchorElement | null = document.createElement('a')
+  urlParsingNode.setAttribute('href', url)
+
+  const { protocol, host } = urlParsingNode
+
+  urlParsingNode = null
+
+  return { protocol, host }
+}
