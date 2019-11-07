@@ -1,5 +1,6 @@
+import { AxiosError } from './../../src/helpers/error'
 import axios from '../../src/index'
-
+// withCredentials
 // document.cookie = 'a=b'
 
 // axios.get('/more/get').then(res => {
@@ -18,11 +19,51 @@ import axios from '../../src/index'
 //     console.log(res)
 //   })
 
-const instance = axios.create({
-  xsrfCookieName: 'XSRF-TOKEN-D',
-  xsrfHeaderName: 'X-XSRF-TOKEN-D'
-})
+// XSRF
+// const instance = axios.create({
+//   xsrfCookieName: 'XSRF-TOKEN-D',
+//   xsrfHeaderName: 'X-XSRF-TOKEN-D'
+// })
 
-instance.get('/more/get').then(res => {
-  console.log(res)
-})
+// instance.get('/more/get').then(res => {
+//   console.log(res)
+// })
+
+// auth
+// axios
+//   .post(
+//     '/more/post',
+//     { a: 1 },
+//     {
+//       auth: {
+//         username: 'Cg',
+//         password: '123456'
+//       }
+//     }
+//   )
+//   .then(res => {
+//     console.log(res)
+//   })
+
+// 自定义合法状态码范围
+axios
+  .get('/more/304')
+  .then(res => {
+    console.log(res)
+  })
+  .catch((e: AxiosError) => {
+    console.log(e.message)
+  })
+
+axios
+  .get('/more/304', {
+    validateStatus(status) {
+      return status >= 200 && status < 400
+    }
+  })
+  .then(res => {
+    console.log(res)
+  })
+  .catch((e: AxiosError) => {
+    console.log(e.message)
+  })

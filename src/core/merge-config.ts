@@ -50,7 +50,7 @@ stratKeysFromVal2.forEach(key => {
   strats[key] = fromVal2Strat
 })
 
-const stratKeysDeepMerge = ['headers'] // 需要使用深度合并策略的method
+const stratKeysDeepMerge = ['headers', 'auth'] // 需要使用深度合并策略的method
 
 stratKeysDeepMerge.forEach(key => {
   strats[key] = deepMergeStrat
