@@ -131,3 +131,26 @@ export function resolveURL(url: string): URLOrigin {
 export function isURLSearchParams(val: any): val is URLSearchParams {
   return typeof val !== 'undefined' && val instanceof URLSearchParams
 }
+
+/**
+ * 判断是否绝对路径
+ *
+ * @export
+ * @param {string} url 待判断url
+ * @returns {boolean} 是否绝对路径
+ */
+export function isAbsoluteURL(url: string): boolean {
+  return /^([a-z][a-z\d+\-\.]*:)?\/\//i.test(url)
+}
+
+/**
+ * 拼接URL
+ *
+ * @export
+ * @param {string} baseURL 基础URL
+ * @param {string} [relativeURL] 相对URL
+ * @returns {string} 完整URL
+ */
+export function combineURL(baseURL: string, relativeURL?: string): string {
+  return relativeURL ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '') : baseURL
+}

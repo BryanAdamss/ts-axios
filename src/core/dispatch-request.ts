@@ -2,7 +2,7 @@ import xhr from './xhr'
 
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types/index'
 
-import { buildURL } from '../helpers/url'
+import { buildURL, isAbsoluteURL, combineURL } from '../helpers/url'
 import { flattenHeaders } from '../helpers/headers'
 import transform from './transform'
 
@@ -40,7 +40,11 @@ function processConfig(config: AxiosRequestConfig): AxiosRequestConfig {
  * @returns {string} 转换后的URL
  */
 function transformURL(config: AxiosRequestConfig): string {
-  const { url, params, paramsSerializer } = config
+  let { url, params, paramsSerializer, baseURL } = config
+
+  if (baseURL && !isAbsoluteURL(url!)) {
+    url = combineURL(baseURL, url)
+  }
 
   // url! 代表类型断言不为空
   return buildURL(url!, params, paramsSerializer)

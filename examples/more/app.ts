@@ -72,40 +72,36 @@ import qs from 'qs'
 //   })
 
 // params
-axios
-  .get('/more/get', {
-    params: new URLSearchParams('a=b&c=b')
-  })
-  .then(res => {
-    console.log(res)
-  })
+// axios
+//   .get('/more/get', {
+//     params: new URLSearchParams('a=b&c=b')
+//   })
+//   .then(res => {
+//     console.log(res)
+//   })
 
-axios
-  .get('/more/get', {
-    params: {
-      a: 1,
-      b: 2,
-      c: ['a', 'b', 'c']
-    }
-  })
-  .then(res => {
-    console.log(res)
-  })
+// axios
+//   .get('/more/get', {
+//     params: {
+//       a: 1,
+//       b: 2,
+//       c: ['a', 'b', 'c']
+//     }
+//   })
+//   .then(res => {
+//     console.log(res)
+//   })
 
+// const instance = axios.create({
+//   paramsSerializer(params) {
+//     return qs.stringify(params, { arrayFormat: 'brackets' })
+//   }
+// })
+
+// baseURL
 const instance = axios.create({
-  paramsSerializer(params) {
-    return qs.stringify(params, { arrayFormat: 'brackets' })
-  }
+  baseURL: 'https://img.mukewang.com/'
 })
 
-instance
-  .get('/more/get', {
-    params: {
-      a: 1,
-      b: 2,
-      c: ['a', 'b', 'c']
-    }
-  })
-  .then(res => {
-    console.log(res)
-  })
+instance.get('5cc01a7b0001a33718720632.jpg')
+instance.get('https://img.mukewang.com/szimg/5becd5ad0001b89306000338-360-202.jpg')
