@@ -40,6 +40,8 @@ export interface AxiosRequestConfig {
 
   validateStatus?: (status: number) => boolean
 
+  paramsSerializer?: (params: any) => string
+
   [propName: string]: any
 }
 

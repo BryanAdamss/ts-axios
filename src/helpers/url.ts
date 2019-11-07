@@ -23,40 +23,53 @@ function encode(val: string): string {
  * @export
  * @param {string} url URL字符串
  * @param {*} [params] 可选的参数
- * @returns {string} 拼接后的url
+ * @param {(params: any) => string} [paramsSerializer] paramsSerializer函数
+ * @returns {string}
  */
-export function buildURL(url: string, params?: any): string {
+export function buildURL(
+  url: string,
+  params?: any,
+  paramsSerializer?: (params: any) => string
+): string {
   if (!params) return url
 
-  const parts: string[] = []
+  let serializedParams
 
-  // 将parasm处理成`${encode(key)}=${encode(val)}`形式
-  Object.keys(params).forEach(key => {
-    const val = params[key]
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params)
+  } else if (isURLSearchParams(params)) {
+    serializedParams = params.toString()
+  } else {
+    const parts: string[] = []
 
-    if (val == null) return
+    // 将parasm处理成`${encode(key)}=${encode(val)}`形式
+    Object.keys(params).forEach(key => {
+      const val = params[key]
 
-    let values = []
+      if (val == null) return
 
-    if (Array.isArray(val)) {
-      values = val
-      key += '[]'
-    } else {
-      values = [val]
-    }
+      let values = []
 
-    values.forEach(val => {
-      if (isDate(val)) {
-        val = val.toISOString()
-      } else if (isPlainObject(val)) {
-        val = JSON.stringify(val)
+      if (Array.isArray(val)) {
+        values = val
+        key += '[]'
+      } else {
+        values = [val]
       }
 
-      parts.push(`${encode(key)}=${encode(val)}`)
-    })
-  })
+      values.forEach(val => {
+        if (isDate(val)) {
+          val = val.toISOString()
+        } else if (isPlainObject(val)) {
+          val = JSON.stringify(val)
+        }
 
-  let serializedParams = parts.join('&')
+        parts.push(`${encode(key)}=${encode(val)}`)
+      })
+    })
+
+    serializedParams = parts.join('&')
+  }
 
   if (serializedParams && serializedParams.length) {
     const hashIndex = url.indexOf('#')
@@ -106,4 +119,15 @@ export function resolveURL(url: string): URLOrigin {
   urlParsingNode = null
 
   return { protocol, host }
+}
+
+/**
+ * 判断是否是URLSearchParams
+ *
+ * @export
+ * @param {*} val 待检测值
+ * @returns {val is URLSearchParams} 是否是URLSearchParams
+ */
+export function isURLSearchParams(val: any): val is URLSearchParams {
+  return typeof val !== 'undefined' && val instanceof URLSearchParams
 }

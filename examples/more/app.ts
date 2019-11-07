@@ -1,5 +1,8 @@
 import { AxiosError } from './../../src/helpers/error'
 import axios from '../../src/index'
+
+import qs from 'qs'
+
 // withCredentials
 // document.cookie = 'a=b'
 
@@ -46,24 +49,63 @@ import axios from '../../src/index'
 //   })
 
 // 自定义合法状态码范围
+// axios
+//   .get('/more/304')
+//   .then(res => {
+//     console.log(res)
+//   })
+//   .catch((e: AxiosError) => {
+//     console.log(e.message)
+//   })
+
+// axios
+//   .get('/more/304', {
+//     validateStatus(status) {
+//       return status >= 200 && status < 400
+//     }
+//   })
+//   .then(res => {
+//     console.log(res)
+//   })
+//   .catch((e: AxiosError) => {
+//     console.log(e.message)
+//   })
+
+// params
 axios
-  .get('/more/304')
+  .get('/more/get', {
+    params: new URLSearchParams('a=b&c=b')
+  })
   .then(res => {
     console.log(res)
   })
-  .catch((e: AxiosError) => {
-    console.log(e.message)
-  })
 
 axios
-  .get('/more/304', {
-    validateStatus(status) {
-      return status >= 200 && status < 400
+  .get('/more/get', {
+    params: {
+      a: 1,
+      b: 2,
+      c: ['a', 'b', 'c']
     }
   })
   .then(res => {
     console.log(res)
   })
-  .catch((e: AxiosError) => {
-    console.log(e.message)
+
+const instance = axios.create({
+  paramsSerializer(params) {
+    return qs.stringify(params, { arrayFormat: 'brackets' })
+  }
+})
+
+instance
+  .get('/more/get', {
+    params: {
+      a: 1,
+      b: 2,
+      c: ['a', 'b', 'c']
+    }
+  })
+  .then(res => {
+    console.log(res)
   })

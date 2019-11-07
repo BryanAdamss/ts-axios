@@ -40,10 +40,10 @@ function processConfig(config: AxiosRequestConfig): AxiosRequestConfig {
  * @returns {string} 转换后的URL
  */
 function transformURL(config: AxiosRequestConfig): string {
-  const { url, params } = config
+  const { url, params, paramsSerializer } = config
 
   // url! 代表类型断言不为空
-  return buildURL(url!, params)
+  return buildURL(url!, params, paramsSerializer)
 }
 
 /**
