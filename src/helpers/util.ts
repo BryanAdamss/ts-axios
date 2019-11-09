@@ -12,17 +12,6 @@ export function isDate(val: any): val is Date {
 }
 
 /**
- * 是否object
- *
- * @export
- * @param {*} val 待判断的值
- * @returns {val is Object}是否是Object
- */
-export function isObject(val: any): val is Object {
-  return val != null && typeof val === 'object'
-}
-
-/**
  * 判断是否普通对象
  *
  * @export

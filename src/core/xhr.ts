@@ -11,7 +11,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       url,
       data = null,
       method = 'get',
-      headers,
+      headers = {},
       responseType,
       timeout,
       cancelToken,
@@ -73,11 +73,11 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 
       request.onerror = function handleError() {
         // onerror触发时没有response，所以不传
-        reject(createError('NetWork Error', config, null, request))
+        reject(createError('Network Error', config, null, request))
       }
 
       request.ontimeout = function handleTimeout() {
-        reject(createError(`Timeouts of ${timeout}ms`, config, 'ECONNABORTED', request))
+        reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', request))
       }
 
       if (onDownloadProgress) {
@@ -132,7 +132,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       } else {
         reject(
           createError(
-            `Request faild with status code ${response.status}`,
+            `Request failed with status code ${response.status}`,
             config,
             null,
             request,
