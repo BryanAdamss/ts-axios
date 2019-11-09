@@ -25,7 +25,7 @@ export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromis
  * @param {AxiosRequestConfig} config 待处理的config
  * @returns {AxiosRequestConfig} 处理后的config
  */
-function processConfig(config: AxiosRequestConfig): AxiosRequestConfig {
+export function processConfig(config: AxiosRequestConfig): AxiosRequestConfig {
   config.url = transformURL(config)
   config.data = transform(config.data, config.headers, config.transformRequest)
   config.headers = flattenHeaders(config.headers, config.method!)
@@ -39,7 +39,7 @@ function processConfig(config: AxiosRequestConfig): AxiosRequestConfig {
  * @param {AxiosRequestConfig} config 配置
  * @returns {string} 转换后的URL
  */
-function transformURL(config: AxiosRequestConfig): string {
+export function transformURL(config: AxiosRequestConfig): string {
   let { url, params, paramsSerializer, baseURL } = config
 
   if (baseURL && !isAbsoluteURL(url!)) {
@@ -56,11 +56,11 @@ function transformURL(config: AxiosRequestConfig): string {
  * @param {AxiosResponse} res 返回值
  * @returns {AxiosResponse} 转换后的返回值
  */
-function transformResponseData(res: AxiosResponse): AxiosResponse {
+export function transformResponseData(res: AxiosResponse): AxiosResponse {
   res.data = transform(res.data, res.headers, res.config.transformResponse)
   return res
 }
 
-function throwIfCancellationRequested(config: AxiosRequestConfig): void {
+export function throwIfCancellationRequested(config: AxiosRequestConfig): void {
   if (config.cancelToken) config.cancelToken.throwIfRequested()
 }
