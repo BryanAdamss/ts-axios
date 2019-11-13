@@ -1,6 +1,6 @@
 {
   "name": "@bryanadamss/ts-axios",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "refactoring axios with typescript",
   "keywords": [
     "axios",
