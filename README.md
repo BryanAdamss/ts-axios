@@ -1,3 +1,3 @@
-# TypeScript library starter
+# ts-axios
 
 > refactoring axios with typescript
